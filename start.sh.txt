@@ -1,0 +1,1 @@
+streamlit run enhanced_universe.py --server.port $PORT --server.enableCORS false
