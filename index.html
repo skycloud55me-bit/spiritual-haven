@@ -1,0 +1,1236 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>الواحة الروحانية - ملاذك الإيماني</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <style>
+        :root {
+            --primary-color: #1a5e63;
+            --secondary-color: #2d936c;
+            --accent-color: #6abf69;
+            --light-color: #f8f9fa;
+            --dark-color: #343a40;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #1a5e63 0%, #2d936c 50%, #6abf69 100%);
+            background-size: 400% 400%;
+            animation: gradient 15s ease infinite;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            min-height: 100vh;
+        }
+        
+        @keyframes gradient {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        
+        .islamic-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 30px;
+            margin: 15px 0;
+            border: 2px solid var(--secondary-color);
+            box-shadow: 0 10px 30px rgba(45, 147, 108, 0.3);
+            transition: transform 0.3s ease;
+        }
+        
+        .islamic-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .blessed-text {
+            color: var(--primary-color);
+            font-weight: bold;
+            font-size: 1.2em;
+        }
+        
+        .quran-frame {
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: 20px;
+            border-radius: 15px;
+            margin: 10px 0;
+            border-right: 10px solid var(--accent-color);
+        }
+        
+        .memory-game {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+            margin: 20px 0;
+        }
+        
+        .memory-card {
+            background: var(--primary-color);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+        
+        .memory-card:hover {
+            transform: scale(1.05);
+            background: var(--secondary-color);
+        }
+        
+        .memory-card.flipped {
+            background: var(--accent-color);
+        }
+        
+        .nav-pills .nav-link.active {
+            background-color: var(--secondary-color) !important;
+        }
+        
+        .sidebar {
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 15px;
+            padding: 20px;
+            margin: 15px 0;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .progress {
+            height: 25px;
+            margin: 10px 0;
+        }
+        
+        .progress-bar {
+            background-color: var(--secondary-color);
+        }
+        
+        .btn-primary {
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
+        }
+        
+        .btn-primary:hover {
+            background-color: var(--secondary-color);
+            border-color: var(--secondary-color);
+        }
+        
+        .stat-card {
+            text-align: center;
+            padding: 15px;
+            border-radius: 10px;
+            background: white;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+            margin: 10px 0;
+        }
+        
+        .stat-number {
+            font-size: 2rem;
+            font-weight: bold;
+            color: var(--primary-color);
+        }
+        
+        .dua-card {
+            background: linear-gradient(45deg, #f8f9fa, #e9ecef);
+            border-radius: 10px;
+            padding: 15px;
+            margin: 10px 0;
+            border-right: 5px solid var(--accent-color);
+        }
+        
+        .flip-animation {
+            animation: flip 0.5s ease;
+        }
+        
+        @keyframes flip {
+            0% { transform: rotateY(0); }
+            50% { transform: rotateY(90deg); }
+            100% { transform: rotateY(0); }
+        }
+        
+        .confetti {
+            position: fixed;
+            width: 10px;
+            height: 10px;
+            background-color: var(--accent-color);
+            opacity: 0.7;
+            animation: fall linear forwards;
+            z-index: 1000;
+        }
+        
+        @keyframes fall {
+            to {
+                transform: translateY(100vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <!-- الشريط الجانبي -->
+            <div class="col-md-3">
+                <div class="sidebar sticky-top">
+                    <h2 class="text-center mb-4" style="color: var(--primary-color);">
+                        <i class="fas fa-mosque"></i> الواحة الروحانية
+                    </h2>
+                    
+                    <div class="mb-3">
+                        <label for="languageSelect" class="form-label">اللغة:</label>
+                        <select class="form-select" id="languageSelect">
+                            <option value="ar">العربية</option>
+                            <option value="en">English</option>
+                            <option value="fr">Français</option>
+                        </select>
+                    </div>
+                    
+                    <div class="d-grid gap-2 mb-4">
+                        <button class="btn btn-outline-primary active page-btn" data-page="quran-garden">
+                            <i class="fas fa-book-quran"></i> بستان القرآن
+                        </button>
+                        <button class="btn btn-outline-primary page-btn" data-page="righteous-path">
+                            <i class="fas fa-hands-praying"></i> رياض الصالحين
+                        </button>
+                        <button class="btn btn-outline-primary page-btn" data-page="obedience-gardens">
+                            <i class="fas fa-mosque"></i> جنات الطاعة
+                        </button>
+                        <button class="btn btn-outline-primary page-btn" data-page="meditation-garden">
+                            <i class="fas fa-brain"></i> حديقة التأمل
+                        </button>
+                        <button class="btn btn-outline-primary page-btn" data-page="gratitude-tree">
+                            <i class="fas fa-leaf"></i> شجرة الامتنان
+                        </button>
+                        <button class="btn btn-outline-primary page-btn" data-page="educational-games">
+                            <i class="fas fa-gamepad"></i> ألعاب تربوية
+                        </button>
+                        <button class="btn btn-outline-primary page-btn" data-page="progress-tracker">
+                            <i class="fas fa-chart-line"></i> سجل تطورك
+                        </button>
+                    </div>
+                    
+                    <hr>
+                    
+                    <div class="stat-card">
+                        <div class="stat-number" id="prayerStreak">0</div>
+                        <div>سلسلة الصلاة</div>
+                        <i class="fas fa-mosque mt-2" style="color: var(--primary-color);"></i>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-number" id="goodDeeds">0</div>
+                        <div>الحسنات</div>
+                        <i class="fas fa-star mt-2" style="color: var(--accent-color);"></i>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-number" id="quranPages">0</div>
+                        <div>صفحات القرآن</div>
+                        <i class="fas fa-book-open mt-2" style="color: var(--secondary-color);"></i>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-number" id="gameScore">0</div>
+                        <div>نتيجة الألعاب</div>
+                        <i class="fas fa-trophy mt-2" style="color: gold;"></i>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- المحتوى الرئيسي -->
+            <div class="col-md-9">
+                <div class="main-content p-3">
+                    <!-- صفحة بستان القرآن -->
+                    <div id="quran-garden" class="page-content">
+                        <div class="islamic-card">
+                            <h2 class="blessed-text text-center mb-4">
+                                <i class="fas fa-book-quran"></i> بستان القرآن الكريم
+                            </h2>
+                            
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="quran-frame">
+                                        <h3>آية اليوم:</h3>
+                                        <h2 id="dailyVerse">"أَلَا بِذِكْرِ اللَّهِ تَطْمَئِنُّ الْقُلُوبُ"</h2>
+                                        <p id="verseSurah">الرعد - 28</p>
+                                    </div>
+                                    <p class="mt-3"><strong>شرح الآية:</strong> <span id="verseExplanation">الذكر يطمئن القلب ويزيل الهمّ.</span></p>
+                                    
+                                    <button class="btn btn-primary mt-2" id="newVerseBtn">
+                                        <i class="fas fa-sync-alt"></i> آية جديدة
+                                    </button>
+                                </div>
+                                
+                                <div class="col-md-6">
+                                    <h3 class="blessed-text">
+                                        <i class="fas fa-bullseye"></i> تحدي القرآن اليومي
+                                    </h3>
+                                    
+                                    <div class="mb-3">
+                                        <label for="pagesGoal" class="form-label">حددي هدفك اليومي من الصفحات: <span id="goalValue">10</span></label>
+                                        <input type="range" class="form-range" id="pagesGoal" min="1" max="20" value="10">
+                                    </div>
+                                    
+                                    <button class="btn btn-success mb-3" id="recordReadingBtn">
+                                        <i class="fas fa-book"></i> سجلي قراءتك
+                                    </button>
+                                    
+                                    <h4 class="mt-4">
+                                        <i class="fas fa-book-open"></i> مكتبة الأدعية
+                                    </h4>
+                                    
+                                    <select class="form-select mb-3" id="duaCategory">
+                                        <option value="all">جميع الأدعية</option>
+                                        <option value="العلم والعمل">العلم والعمل</option>
+                                        <option value="التيسير">التيسير</option>
+                                        <option value="الهموم">الهموم</option>
+                                        <option value="الدعاء الجامع">الدعاء الجامع</option>
+                                    </select>
+                                    
+                                    <div class="dua-card">
+                                        <p id="duaText">اللهم إني أسألك علماً نافعاً، ورزقاً طيباً، وعملاً متقبلاً</p>
+                                        <small class="text-muted" id="duaCategoryText">نوع الدعاء: العلم والعمل</small>
+                                    </div>
+                                    
+                                    <button class="btn btn-outline-primary mt-2" id="newDuaBtn">
+                                        <i class="fas fa-sync-alt"></i> دعاء جديد
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- صفحة رياض الصالحين -->
+                    <div id="righteous-path" class="page-content d-none">
+                        <div class="islamic-card">
+                            <h2 class="blessed-text text-center mb-4">
+                                <i class="fas fa-hands-praying"></i> رياض الصالحين
+                            </h2>
+                            
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <h3>
+                                        <i class="fas fa-sun"></i> أعمال الخير اليومية
+                                    </h3>
+                                    
+                                    <select class="form-select mb-3" id="goodDeedsSelect">
+                                        <option value="مساعدة الوالدين">مساعدة الوالدين</option>
+                                        <option value="زيارة الأقارب">زيارة الأقارب</option>
+                                        <option value="إطعام طائر">إطعام طائر</option>
+                                        <option value="تبسم في وجه أخيك">تبسم في وجه أخيك</option>
+                                        <option value="إماطة الأذى عن الطريق">إماطة الأذى عن الطريق</option>
+                                        <option value="الكلمة الطيبة">الكلمة الطيبة</option>
+                                    </select>
+                                    
+                                    <button class="btn btn-success" id="recordDeedBtn">
+                                        <i class="fas fa-hands-praying"></i> سجلي هذا العمل
+                                    </button>
+                                </div>
+                                
+                                <div class="col-md-6">
+                                    <h3>
+                                        <i class="fas fa-mosque"></i> متابعة الصلوات
+                                    </h3>
+                                    
+                                    <div class="form-check mb-2">
+                                        <input class="form-check-input prayer-check" type="checkbox" id="fajrPrayer">
+                                        <label class="form-check-label" for="fajrPrayer">صلاة الفجر</label>
+                                    </div>
+                                    <div class="form-check mb-2">
+                                        <input class="form-check-input prayer-check" type="checkbox" id="dhuhrPrayer">
+                                        <label class="form-check-label" for="dhuhrPrayer">صلاة الظهر</label>
+                                    </div>
+                                    <div class="form-check mb-2">
+                                        <input class="form-check-input prayer-check" type="checkbox" id="asrPrayer">
+                                        <label class="form-check-label" for="asrPrayer">صلاة العصر</label>
+                                    </div>
+                                    <div class="form-check mb-2">
+                                        <input class="form-check-input prayer-check" type="checkbox" id="maghribPrayer">
+                                        <label class="form-check-label" for="maghribPrayer">صلاة المغرب</label>
+                                    </div>
+                                    <div class="form-check mb-2">
+                                        <input class="form-check-input prayer-check" type="checkbox" id="ishaPrayer">
+                                        <label class="form-check-label" for="ishaPrayer">صلاة العشاء</label>
+                                    </div>
+                                    
+                                    <button class="btn btn-primary mt-3" id="calculatePrayerBtn">
+                                        <i class="fas fa-calculator"></i> احسبي سلسلة الصلاة
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- صفحة جنات الطاعة -->
+                    <div id="obedience-gardens" class="page-content d-none">
+                        <div class="islamic-card">
+                            <h2 class="blessed-text text-center mb-4">
+                                <i class="fas fa-mosque"></i> جنات الطاعة
+                            </h2>
+                            
+                            <ul class="nav nav-pills mb-3 justify-content-center" id="obedienceTabs" role="tablist">
+                                <li class="nav-item" role="presentation">
+                                    <button class="nav-link active" id="azkar-tab" data-bs-toggle="pill" data-bs-target="#azkar" type="button" role="tab">
+                                        <i class="fas fa-pray"></i> الأذكار اليومية
+                                    </button>
+                                </li>
+                                <li class="nav-item" role="presentation">
+                                    <button class="nav-link" id="dua-tab" data-bs-toggle="pill" data-bs-target="#dua" type="button" role="tab">
+                                        <i class="fas fa-hands-praying"></i> دعاء الخير
+                                    </button>
+                                </li>
+                                <li class="nav-item" role="presentation">
+                                    <button class="nav-link" id="worship-tab" data-bs-toggle="pill" data-bs-target="#worship" type="button" role="tab">
+                                        <i class="fas fa-star-and-crescent"></i> العبادات المستحبة
+                                    </button>
+                                </li>
+                            </ul>
+                            
+                            <div class="tab-content" id="obedienceTabsContent">
+                                <div class="tab-pane fade show active" id="azkar" role="tabpanel">
+                                    <h4>برنامج الأذكار اليومية</h4>
+                                    
+                                    <div class="mb-3">
+                                        <label for="azkarTime" class="form-label">اختر وقت الذكر:</label>
+                                        <select class="form-select" id="azkarTime">
+                                            <option value="morning">الصباح</option>
+                                            <option value="evening">المساء</option>
+                                            <option value="afterPrayer">بعد الصلاة</option>
+                                        </select>
+                                    </div>
+                                    
+                                    <div id="azkarList">
+                                        <div class="azkar-item mb-3">
+                                            <p>أستغفر الله</p>
+                                            <input type="number" class="form-control" min="0" max="100" value="0">
+                                        </div>
+                                        <div class="azkar-item mb-3">
+                                            <p>سبحان الله وبحمده</p>
+                                            <input type="number" class="form-control" min="0" max="100" value="0">
+                                        </div>
+                                        <div class="azkar-item mb-3">
+                                            <p>لا إله إلا الله وحده لا شريك له</p>
+                                            <input type="number" class="form-control" min="0" max="100" value="0">
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="tab-pane fade" id="dua" role="tabpanel">
+                                    <h4>أدعية الخير للآخرين</h4>
+                                    
+                                    <div class="dua-card mb-3">
+                                        <p>اللهم اغفر للمسلمين والمسلمات</p>
+                                        <button class="btn btn-outline-primary btn-sm">ادعي بهذا الدعاء</button>
+                                    </div>
+                                    
+                                    <div class="dua-card mb-3">
+                                        <p>اللهم ارحم والدَي وارزقهما الجنة</p>
+                                        <button class="btn btn-outline-primary btn-sm">ادعي بهذا الدعاء</button>
+                                    </div>
+                                    
+                                    <div class="dua-card mb-3">
+                                        <p>اللهم احفظ إخواني وأخواتي في الإسلام</p>
+                                        <button class="btn btn-outline-primary btn-sm">ادعي بهذا الدعاء</button>
+                                    </div>
+                                </div>
+                                
+                                <div class="tab-pane fade" id="worship" role="tabpanel">
+                                    <h4>العبادات المستحبة</h4>
+                                    
+                                    <div class="accordion" id="worshipAccordion">
+                                        <div class="accordion-item">
+                                            <h2 class="accordion-header">
+                                                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#worshipOne">
+                                                    صلاة الضحى
+                                                </button>
+                                            </h2>
+                                            <div id="worshipOne" class="accordion-collapse collapse show" data-bs-parent="#worshipAccordion">
+                                                <div class="accordion-body">
+                                                    <strong>الثواب:</strong> صدقة عن كل مفصل في جسمك
+                                                    <button class="btn btn-success btn-sm mt-2">سجلي هذا العمل</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="accordion-item">
+                                            <h2 class="accordion-header">
+                                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#worshipTwo">
+                                                    قيام الليل
+                                                </button>
+                                            </h2>
+                                            <div id="worshipTwo" class="accordion-collapse collapse" data-bs-parent="#worshipAccordion">
+                                                <div class="accordion-body">
+                                                    <strong>الثواب:</strong> تقرب إلى الله ورفعة في الدرجات
+                                                    <button class="btn btn-success btn-sm mt-2">سجلي هذا العمل</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- صفحة حديقة التأمل -->
+                    <div id="meditation-garden" class="page-content d-none">
+                        <div class="islamic-card">
+                            <h2 class="blessed-text text-center mb-4">
+                                <i class="fas fa-brain"></i> حديقة التأمل
+                            </h2>
+                            
+                            <h4>تأملاتك اليومية</h4>
+                            <textarea class="form-control mb-3" id="reflectionText" rows="5" placeholder="اكتبي تأملاتك الروحانية لهذا اليوم..."></textarea>
+                            <button class="btn btn-primary" id="saveReflectionBtn">
+                                <i class="fas fa-save"></i> سجلي التأمل
+                            </button>
+                            
+                            <h4 class="mt-4">سجل تأملاتك السابقة</h4>
+                            <div id="reflectionHistory" class="mt-3">
+                                <!-- سيتم ملؤها ديناميكيًا -->
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- صفحة شجرة الامتنان -->
+                    <div id="gratitude-tree" class="page-content d-none">
+                        <div class="islamic-card">
+                            <h2 class="blessed-text text-center mb-4">
+                                <i class="fas fa-leaf"></i> شجرة الامتنان
+                            </h2>
+                            
+                            <h4>ما الذي تشكرين الله عليه اليوم؟</h4>
+                            <textarea class="form-control mb-3" id="gratitudeText" rows="4" placeholder="اكتبي ثلاثة أشياء تشكرين الله عليها اليوم..."></textarea>
+                            <button class="btn btn-success" id="saveGratitudeBtn">
+                                <i class="fas fa-star"></i> سجلي الامتنان
+                            </button>
+                            
+                            <div class="mt-4 text-center">
+                                <i class="fas fa-tree" style="font-size: 5rem; color: var(--accent-color);"></i>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- صفحة الألعاب التربوية -->
+                    <div id="educational-games" class="page-content d-none">
+                        <div class="islamic-card">
+                            <h2 class="blessed-text text-center mb-4">
+                                <i class="fas fa-gamepad"></i> ألعاب تربوية مفيدة
+                            </h2>
+                            
+                            <ul class="nav nav-pills mb-3 justify-content-center" id="gamesTabs" role="tablist">
+                                <li class="nav-item" role="presentation">
+                                    <button class="nav-link active" id="quiz-tab" data-bs-toggle="pill" data-bs-target="#quiz" type="button" role="tab">
+                                        <i class="fas fa-puzzle-piece"></i> اختبار اليوم
+                                    </button>
+                                </li>
+                                <li class="nav-item" role="presentation">
+                                    <button class="nav-link" id="memory-tab" data-bs-toggle="pill" data-bs-target="#memory" type="button" role="tab">
+                                        <i class="fas fa-brain"></i> لعبة الذاكرة
+                                    </button>
+                                </li>
+                                <li class="nav-item" role="presentation">
+                                    <button class="nav-link" id="questions-tab" data-bs-toggle="pill" data-bs-target="#questions" type="button" role="tab">
+                                        <i class="fas fa-question-circle"></i> أسئلة متنوعة
+                                    </button>
+                                </li>
+                            </ul>
+                            
+                            <div class="tab-content" id="gamesTabsContent">
+                                <div class="tab-pane fade show active" id="quiz" role="tabpanel">
+                                    <h4>اختبار اليوم (6 أسئلة)</h4>
+                                    <div id="quizContainer">
+                                        <!-- سيتم ملؤها ديناميكيًا -->
+                                    </div>
+                                    <button class="btn btn-primary mt-3" id="calculateQuizBtn">
+                                        <i class="fas fa-calculator"></i> احسبي نتيجتك
+                                    </button>
+                                </div>
+                                
+                                <div class="tab-pane fade" id="memory" role="tabpanel">
+                                    <h4>لعبة الذاكرة الإسلامية</h4>
+                                    <p>حاولي تذكر مواقع الرموز ثم انقري لتكشفيها:</p>
+                                    
+                                    <div class="memory-game" id="memoryGame">
+                                        <!-- سيتم ملؤها ديناميكيًا -->
+                                    </div>
+                                    
+                                    <button class="btn btn-primary mt-3" id="resetMemoryBtn">
+                                        <i class="fas fa-redo"></i> ابدأ لعبة جديدة
+                                    </button>
+                                </div>
+                                
+                                <div class="tab-pane fade" id="questions" role="tabpanel">
+                                    <h4>أسئلة متنوعة يومياً</h4>
+                                    <div id="extraQuestions">
+                                        <!-- سيتم ملؤها ديناميكيًا -->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- صفحة سجل التطور -->
+                    <div id="progress-tracker" class="page-content d-none">
+                        <div class="islamic-card">
+                            <h2 class="blessed-text text-center mb-4">
+                                <i class="fas fa-chart-line"></i> سجل تطورك الروحاني
+                            </h2>
+                            
+                            <div class="row mb-4">
+                                <div class="col-md-6">
+                                    <div id="progressChart" style="height: 300px;"></div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div id="activitiesChart" style="height: 300px;"></div>
+                                </div>
+                            </div>
+                            
+                            <h4 class="mb-3">إحصائياتك التفصيلية</h4>
+                            <div class="row text-center">
+                                <div class="col-md-3">
+                                    <div class="stat-card">
+                                        <div class="stat-number" id="totalDeeds">0</div>
+                                        <div>إجمالي الحسنات</div>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="stat-card">
+                                        <div class="stat-number" id="totalPages">0</div>
+                                        <div>صفحات القرآن</div>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="stat-card">
+                                        <div class="stat-number" id="totalGameScore">0</div>
+                                        <div>نتيجة الألعاب</div>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="stat-card">
+                                        <div class="stat-number" id="totalGratitude">0</div>
+                                        <div>أيام الشكر</div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <h4 class="mt-4 mb-3">تقدمك نحو الأهداف</h4>
+                            <div id="goalsProgress">
+                                <!-- سيتم ملؤها ديناميكيًا -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- تذييل الصفحة -->
+                <div class="text-center mt-4 p-3 text-white">
+                    <h5>🌸 صنع بكل حب لتقوية إيمانك وروحانيتك</h5>
+                    <p class="mb-0">"وذكر فإن الذكرى تنفع المؤمنين" - الحمد لله رب العالمين</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // بيانات التطبيق
+        const appData = {
+            prayerStreak: 0,
+            goodDeeds: 0,
+            quranPages: 0,
+            memoryGameScore: 0,
+            gratitudeDays: [],
+            reflectionEntries: [],
+            dailyVerseDate: null,
+            dailyVerseIndex: 0
+        };
+
+        // قاعدة بيانات موسعة للأدعية والآيات
+        const extendedDuas = [
+            {text: "اللهم إني أسألك علماً نافعاً، ورزقاً طيباً، وعملاً متقبلاً", category: "العلم والعمل"},
+            {text: "ربّ اشرح لي صدري، ويسّر لي أمري، واحلل عقدة من لساني", category: "التيسير"},
+            {text: "اللهم إني أعوذ بك من الهمّ والحزن، والعجز والكسل، والجبن والبخل", category: "الهموم"},
+            {text: "ربّنا آتنا في الدنيا حسنة وفي الآخرة حسنة وقنا عذاب النار", category: "الدعاء الجامع"},
+            {text: "اللهم إني أسألك العفو والعافية في الدنيا والآخرة", category: "العافية"},
+            {text: "اللهم اجعلني شكوراً، واجعلني صبوراً، واجعلني في عينك كبيراً", category: "الأخلاق"}
+        ];
+
+        const quranVerses = [
+            {verse: "أَلَا بِذِكْرِ اللَّهِ تَطْمَئِنُّ الْقُلُوبُ", surah: "الرعد - 28", explanation: "الذكر يطمئن القلب ويزيل الهمّ."},
+            {verse: "إِنَّ مَعَ الْعُسْرِ يُسْرًا", surah: "الشرح - 5", explanation: "بعد كلّ ضيق يأتي التيسير والفرج."},
+            {verse: "وَجَعَلْنَا مِنَ الْمَاءِ كُلَّ شَيْءٍ حَيٍّ", surah: "الأنبياء - 30", explanation: "الماء أصل الحياة ونعمة عظيمة."},
+            {verse: "رَبِّ اشْرَحْ لِي صَدْرِي وَيَسِّرْ لِي أَمْرِي", surah: "طه - 25", explanation: "دعاء لطلب التيسير والسداد."}
+        ];
+
+        const islamicQuestions = [
+            {question: "كم عدد أركان الإسلام؟", options: ["4", "5", "6"], answer: "5", category: "أركان الإسلام"},
+            {question: "ما هي أول آية نزلت من القرآن؟", options: ["اقرأ", "الفاتحة", "البقرة"], answer: "اقرأ", category: "القرآن"},
+            {question: "من هو خاتم الأنبياء؟", options: ["موسى", "عيسى", "محمد"], answer: "محمد", category: "الأنبياء"},
+            {question: "ما هي أعظم سورة في القرآن؟", options: ["البقرة", "الفاتحة", "يس"], answer: "الفاتحة", category: "القرآن"},
+            {question: "كم عدد الركعات في صلاة الظهر؟", options: ["3", "4", "5"], answer: "4", category: "الصلاة"},
+            {question: "ما هي السورة التي تسمى قلب القرآن؟", options: ["البقرة", "يس", "الرحمن"], answer: "يس", category: "القرآن"}
+        ];
+
+        // تهيئة التطبيق
+        document.addEventListener('DOMContentLoaded', function() {
+            loadAppData();
+            initializeNavigation();
+            initializeQuranGarden();
+            initializeRighteousPath();
+            initializeObedienceGardens();
+            initializeMeditationGarden();
+            initializeGratitudeTree();
+            initializeEducationalGames();
+            initializeProgressTracker();
+            updateStatsDisplay();
+        });
+
+        // تحميل البيانات المحفوظة
+        function loadAppData() {
+            const savedData = localStorage.getItem('spiritualOasisData');
+            if (savedData) {
+                Object.assign(appData, JSON.parse(savedData));
+            }
+        }
+
+        // حفظ البيانات
+        function saveAppData() {
+            localStorage.setItem('spiritualOasisData', JSON.stringify(appData));
+        }
+
+        // تحديث عرض الإحصائيات
+        function updateStatsDisplay() {
+            document.getElementById('prayerStreak').textContent = appData.prayerStreak;
+            document.getElementById('goodDeeds').textContent = appData.goodDeeds;
+            document.getElementById('quranPages').textContent = appData.quranPages;
+            document.getElementById('gameScore').textContent = appData.memoryGameScore;
+            
+            document.getElementById('totalDeeds').textContent = appData.goodDeeds;
+            document.getElementById('totalPages').textContent = appData.quranPages;
+            document.getElementById('totalGameScore').textContent = appData.memoryGameScore;
+            document.getElementById('totalGratitude').textContent = appData.gratitudeDays.length;
+        }
+
+        // التنقل بين الصفحات
+        function initializeNavigation() {
+            const pageButtons = document.querySelectorAll('.page-btn');
+            pageButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const targetPage = this.getAttribute('data-page');
+                    
+                    // إزالة النشاط من جميع الأزرار
+                    pageButtons.forEach(btn => btn.classList.remove('active'));
+                    // إضافة النشاط للزر المحدد
+                    this.classList.add('active');
+                    
+                    // إخفاء جميع الصفحات
+                    document.querySelectorAll('.page-content').forEach(page => {
+                        page.classList.add('d-none');
+                    });
+                    
+                    // إظهار الصفحة المحددة
+                    document.getElementById(targetPage).classList.remove('d-none');
+                });
+            });
+        }
+
+        // بستان القرآن
+        function initializeQuranGarden() {
+            // تحديث آية اليوم
+            updateDailyVerse();
+            
+            // زر آية جديدة
+            document.getElementById('newVerseBtn').addEventListener('click', updateDailyVerse);
+            
+            // تحديث قيمة الهدف
+            const pagesGoal = document.getElementById('pagesGoal');
+            const goalValue = document.getElementById('goalValue');
+            pagesGoal.addEventListener('input', function() {
+                goalValue.textContent = this.value;
+            });
+            
+            // تسجيل القراءة
+            document.getElementById('recordReadingBtn').addEventListener('click', function() {
+                const goal = parseInt(pagesGoal.value);
+                appData.quranPages += goal;
+                saveAppData();
+                updateStatsDisplay();
+                
+                // عرض رسالة نجاح
+                alert(`مبارك! أضفتِ ${goal} صفحة إلى سجلك 🌟`);
+                
+                // التحقق من المعالم
+                const milestones = [50, 100, 200, 500];
+                for (const milestone of milestones) {
+                    if (appData.quranPages >= milestone) {
+                        createConfetti();
+                        alert(`🎉 وصلتِ إلى ${milestone} صفحة! الله يبارك فيكِ`);
+                        break;
+                    }
+                }
+            });
+            
+            // تحديث الأدعية
+            updateDua();
+            
+            // زر دعاء جديد
+            document.getElementById('newDuaBtn').addEventListener('click', updateDua);
+            
+            // تصفية الأدعية حسب النوع
+            document.getElementById('duaCategory').addEventListener('change', updateDua);
+        }
+
+        function updateDailyVerse() {
+            const today = new Date().toDateString();
+            if (appData.dailyVerseDate !== today) {
+                appData.dailyVerseDate = today;
+                appData.dailyVerseIndex = Math.floor(Math.random() * quranVerses.length);
+                saveAppData();
+            }
+            
+            const verse = quranVerses[appData.dailyVerseIndex];
+            document.getElementById('dailyVerse').textContent = `"${verse.verse}"`;
+            document.getElementById('verseSurah').textContent = verse.surah;
+            document.getElementById('verseExplanation').textContent = verse.explanation;
+        }
+
+        function updateDua() {
+            const category = document.getElementById('duaCategory').value;
+            let filteredDuas = extendedDuas;
+            
+            if (category !== 'all') {
+                filteredDuas = extendedDuas.filter(dua => dua.category === category);
+            }
+            
+            const randomDua = filteredDuas[Math.floor(Math.random() * filteredDuas.length)];
+            document.getElementById('duaText').textContent = randomDua.text;
+            document.getElementById('duaCategoryText').textContent = `نوع الدعاء: ${randomDua.category}`;
+        }
+
+        // رياض الصالحين
+        function initializeRighteousPath() {
+            // تسجيل عمل صالح
+            document.getElementById('recordDeedBtn').addEventListener('click', function() {
+                const deed = document.getElementById('goodDeedsSelect').value;
+                appData.goodDeeds += 1;
+                appData.memoryGameScore += 2;
+                saveAppData();
+                updateStatsDisplay();
+                
+                createConfetti();
+                alert(`ماشاء الله! ${deed} 🌟`);
+            });
+            
+            // حساب سلسلة الصلاة
+            document.getElementById('calculatePrayerBtn').addEventListener('click', function() {
+                const prayerCheckboxes = document.querySelectorAll('.prayer-check');
+                let prayerCount = 0;
+                
+                prayerCheckboxes.forEach(checkbox => {
+                    if (checkbox.checked) prayerCount++;
+                });
+                
+                if (prayerCount === 5) {
+                    appData.prayerStreak += 1;
+                    appData.memoryGameScore += 5;
+                    saveAppData();
+                    updateStatsDisplay();
+                    
+                    createConfetti();
+                    alert(`أحسنتِ! أكملتِ الصلوات الخمس ✅ سلسلتك: ${appData.prayerStreak} يوم`);
+                } else {
+                    alert(`صليتي ${prayerCount} من أصل 5 صلوات. استمري! 💪`);
+                }
+            });
+        }
+
+        // جنات الطاعة
+        function initializeObedienceGardens() {
+            // إضافة وظائف للتبويبات هنا
+        }
+
+        // حديقة التأمل
+        function initializeMeditationGarden() {
+            document.getElementById('saveReflectionBtn').addEventListener('click', function() {
+                const reflectionText = document.getElementById('reflectionText').value;
+                
+                if (reflectionText.trim() === '') {
+                    alert('اكتبي شيئاً قبل التسجيل!');
+                    return;
+                }
+                
+                const entry = {
+                    date: new Date().toLocaleString('ar-EG'),
+                    text: reflectionText
+                };
+                
+                appData.reflectionEntries.push(entry);
+                saveAppData();
+                
+                // تحديث سجل التأملات
+                updateReflectionHistory();
+                
+                // مسح حقل النص
+                document.getElementById('reflectionText').value = '';
+                
+                alert('تم حفظ تأملاتك! 🌿');
+            });
+            
+            // تحديث سجل التأملات عند فتح الصفحة
+            updateReflectionHistory();
+        }
+
+        function updateReflectionHistory() {
+            const historyContainer = document.getElementById('reflectionHistory');
+            historyContainer.innerHTML = '';
+            
+            if (appData.reflectionEntries.length === 0) {
+                historyContainer.innerHTML = '<p class="text-muted">لا توجد تأملات مسجلة بعد.</p>';
+                return;
+            }
+            
+            appData.reflectionEntries.slice().reverse().forEach(entry => {
+                const entryElement = document.createElement('div');
+                entryElement.className = 'dua-card mb-2';
+                entryElement.innerHTML = `
+                    <strong>${entry.date}</strong>: ${entry.text}
+                `;
+                historyContainer.appendChild(entryElement);
+            });
+        }
+
+        // شجرة الامتنان
+        function initializeGratitudeTree() {
+            document.getElementById('saveGratitudeBtn').addEventListener('click', function() {
+                const gratitudeText = document.getElementById('gratitudeText').value;
+                
+                if (gratitudeText.trim() === '') {
+                    alert('اكتبي شيئاً تشكرين الله عليه!');
+                    return;
+                }
+                
+                const today = new Date().toDateString();
+                if (!appData.gratitudeDays.includes(today)) {
+                    appData.gratitudeDays.push(today);
+                    appData.goodDeeds += 1;
+                    saveAppData();
+                    updateStatsDisplay();
+                    
+                    createConfetti();
+                    alert('ماشاء الله! شكركِ لله يقربكِ إليه 🌟');
+                } else {
+                    alert('لقد سجلتِ امتنانك لهذا اليوم بالفعل!');
+                }
+            });
+        }
+
+        // الألعاب التربوية
+        function initializeEducationalGames() {
+            // تهيئة اختبار اليوم
+            initializeDailyQuiz();
+            
+            // تهيئة لعبة الذاكرة
+            initializeMemoryGame();
+            
+            // تهيئة الأسئلة المتنوعة
+            initializeExtraQuestions();
+            
+            // زر حساب نتيجة الاختبار
+            document.getElementById('calculateQuizBtn').addEventListener('click', calculateQuizScore);
+            
+            // زر إعادة تعيين لعبة الذاكرة
+            document.getElementById('resetMemoryBtn').addEventListener('click', initializeMemoryGame);
+        }
+
+        function initializeDailyQuiz() {
+            const quizContainer = document.getElementById('quizContainer');
+            quizContainer.innerHTML = '';
+            
+            // اختيار 6 أسئلة عشوائية
+            const dailyQuestions = [...islamicQuestions]
+                .sort(() => 0.5 - Math.random())
+                .slice(0, 6);
+            
+            dailyQuestions.forEach((q, index) => {
+                const questionElement = document.createElement('div');
+                questionElement.className = 'mb-4';
+                questionElement.innerHTML = `
+                    <h6>السؤال ${index + 1}: ${q.question}</h6>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="quizQ${index}" id="quizQ${index}Opt0" value="${q.options[0]}">
+                        <label class="form-check-label" for="quizQ${index}Opt0">${q.options[0]}</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="quizQ${index}" id="quizQ${index}Opt1" value="${q.options[1]}">
+                        <label class="form-check-label" for="quizQ${index}Opt1">${q.options[1]}</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="quizQ${index}" id="quizQ${index}Opt2" value="${q.options[2]}">
+                        <label class="form-check-label" for="quizQ${index}Opt2">${q.options[2]}</label>
+                    </div>
+                    <div id="quizFeedback${index}" class="mt-2"></div>
+                    <hr>
+                `;
+                quizContainer.appendChild(questionElement);
+            });
+        }
+
+        function calculateQuizScore() {
+            let score = 0;
+            const dailyQuestions = islamicQuestions.slice(0, 6);
+            
+            dailyQuestions.forEach((q, index) => {
+                const selectedOption = document.querySelector(`input[name="quizQ${index}"]:checked`);
+                const feedbackElement = document.getElementById(`quizFeedback${index}`);
+                
+                if (selectedOption) {
+                    if (selectedOption.value === q.answer) {
+                        score++;
+                        feedbackElement.innerHTML = '<span class="text-success">✅ إجابة صحيحة!</span>';
+                    } else {
+                        feedbackElement.innerHTML = `<span class="text-danger">❌ الإجابة الصحيحة: ${q.answer}</span>`;
+                    }
+                } else {
+                    feedbackElement.innerHTML = `<span class="text-warning">⚠️ لم تجيبي على هذا السؤال. الإجابة الصحيحة: ${q.answer}</span>`;
+                }
+            });
+            
+            appData.memoryGameScore += score * 2;
+            saveAppData();
+            updateStatsDisplay();
+            
+            if (score === 6) {
+                createConfetti();
+                alert(`🎉 نتيجتك: ${score}/6\nمتفوقة! الله يزيدك علماً 🌟`);
+            } else {
+                alert(`🎉 نتيجتك: ${score}/6`);
+            }
+        }
+
+        function initializeMemoryGame() {
+            const memoryGame = document.getElementById('memoryGame');
+            memoryGame.innerHTML = '';
+            
+            // رموز إسلامية للعبة الذاكرة
+            const symbols = ["🕌", "📖", "🌙", "⭐", "🕋", "☪️", "🤲", "🕋"];
+            const gameSymbols = [...symbols, ...symbols].sort(() => 0.5 - Math.random());
+            
+            let flippedCards = [];
+            let matchedPairs = 0;
+            
+            gameSymbols.forEach((symbol, index) => {
+                const card = document.createElement('div');
+                card.className = 'memory-card';
+                card.dataset.symbol = symbol;
+                card.dataset.index = index;
+                card.textContent = '❓';
+                
+                card.addEventListener('click', function() {
+                    if (flippedCards.length < 2 && !this.classList.contains('flipped') && !this.classList.contains('matched')) {
+                        this.textContent = this.dataset.symbol;
+                        this.classList.add('flipped');
+                        flippedCards.push(this);
+                        
+                        if (flippedCards.length === 2) {
+                            const [card1, card2] = flippedCards;
+                            
+                            if (card1.dataset.symbol === card2.dataset.symbol) {
+                                // تطابق
+                                card1.classList.add('matched');
+                                card2.classList.add('matched');
+                                matchedPairs++;
+                                
+                                appData.memoryGameScore += 5;
+                                saveAppData();
+                                updateStatsDisplay();
+                                
+                                if (matchedPairs === symbols.length) {
+                                    setTimeout(() => {
+                                        createConfetti();
+                                        alert('🎊 فوز! أكملتِ اللعبة بنجاح!');
+                                    }, 500);
+                                }
+                                
+                                flippedCards = [];
+                            } else {
+                                // لا يوجد تطابق
+                                setTimeout(() => {
+                                    card1.textContent = '❓';
+                                    card2.textContent = '❓';
+                                    card1.classList.remove('flipped');
+                                    card2.classList.remove('flipped');
+                                    flippedCards = [];
+                                }, 1000);
+                            }
+                        }
+                    }
+                });
+                
+                memoryGame.appendChild(card);
+            });
+        }
+
+        function initializeExtraQuestions() {
+            const extraContainer = document.getElementById('extraQuestions');
+            extraContainer.innerHTML = '';
+            
+            // اختيار 3 أسئلة إضافية عشوائية
+            const extraQuestions = [...islamicQuestions]
+                .sort(() => 0.5 - Math.random())
+                .slice(0, 3);
+            
+            extraQuestions.forEach((q, index) => {
+                const questionElement = document.createElement('div');
+                questionElement.className = 'mb-3';
+                questionElement.innerHTML = `
+                    <div class="dua-card">
+                        <h6>${q.question}</h6>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="extraQ${index}" id="extraQ${index}Opt0" value="${q.options[0]}">
+                            <label class="form-check-label" for="extraQ${index}Opt0">${q.options[0]}</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="extraQ${index}" id="extraQ${index}Opt1" value="${q.options[1]}">
+                            <label class="form-check-label" for="extraQ${index}Opt1">${q.options[1]}</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="extraQ${index}" id="extraQ${index}Opt2" value="${q.options[2]}">
+                            <label class="form-check-label" for="extraQ${index}Opt2">${q.options[2]}</label>
+                        </div>
+                        <button class="btn btn-sm btn-outline-primary mt-2 check-answer-btn" data-question-index="${index}">تحقق من الإجابة</button>
+                        <div id="extraFeedback${index}" class="mt-2"></div>
+                    </div>
+                `;
+                extraContainer.appendChild(questionElement);
+            });
+            
+            // إضافة مستمعين لأزرار التحقق من الإجابة
+            document.querySelectorAll('.check-answer-btn').forEach(button => {
+                button.addEventListener('click', function() {
+                    const questionIndex = parseInt(this.dataset.questionIndex);
+                    const question = extraQuestions[questionIndex];
+                    const selectedOption = document.querySelector(`input[name="extraQ${questionIndex}"]:checked`);
+                    const feedbackElement = document.getElementById(`extraFeedback${questionIndex}`);
+                    
+                    if (selectedOption) {
+                        if (selectedOption.value === question.answer) {
+                            feedbackElement.innerHTML = '<span class="text-success">🎯 صحيح! أحسنتِ</span>';
+                            appData.memoryGameScore += 1;
+                            saveAppData();
+                            updateStatsDisplay();
+                        } else {
+                            feedbackElement.innerHTML = `<span class="text-danger">💡 الجواب الصحيح: ${question.answer}</span>`;
+                        }
+                    } else {
+                        feedbackElement.innerHTML = '<span class="text-warning">⚠️ الرجاء اختيار إجابة</span>';
+                    }
+                });
+            });
+        }
+
+        // سجل التطور
+        function initializeProgressTracker() {
+            // إنشاء مخططات تقدم
+            createProgressCharts();
+            
+            // تحديث تقدم الأهداف
+            updateGoalsProgress();
+        }
+
+        function createProgressCharts() {
+            // مخطط تقدم الحسنات
+            const daysData = {
+                x: ['اليوم 1', 'اليوم 2', 'اليوم 3', 'اليوم 4', 'اليوم 5', 'اليوم 6', 'اليوم 7'],
+                y: [5, 8, 12, 10, 15, 18, 20],
+                type: 'line',
+                name: 'الحسنات',
+                line: {color: '#2d936c'}
+            };
+            
+            const progressLayout = {
+                title: 'تطور أعمالك الصالحة خلال الأسبوع',
+                xaxis: {title: 'الأيام'},
+                yaxis: {title: 'الحسنات'},
+                font: {family: 'Arial, sans-serif'}
+            };
+            
+            Plotly.newPlot('progressChart', [daysData], progressLayout, {responsive: true});
+            
+            // مخطط دائري للأنشطة
+            const activitiesData = [{
+                values: [
+                    appData.prayerStreak,
+                    Math.floor(appData.quranPages / 10),
+                    appData.goodDeeds,
+                    appData.gratitudeDays.length,
+                    appData.memoryGameScore
+                ],
+                labels: ['الصلاة', 'القرآن', 'الأذكار', 'الأعمال', 'الألعاب'],
+                type: 'pie',
+                marker: {
+                    colors: ['#1a5e63', '#2d936c', '#6abf69', '#b3e0a6', '#d9f2d9']
+                }
+            }];
+            
+            const activitiesLayout = {
+                title: 'توزيع أنشطتك الروحانية',
+                font: {family: 'Arial, sans-serif'}
+            };
+            
+            Plotly.newPlot('activitiesChart', activitiesData, activitiesLayout, {responsive: true});
+        }
+
+        function updateGoalsProgress() {
+            const goalsProgress = document.getElementById('goalsProgress');
+            goalsProgress.innerHTML = '';
+            
+            const goals = [
+                {name: "ختم القرآن", current: appData.quranPages, target: 604, unit: "صفحة"},
+                {name: "100 عمل صالح", current: appData.goodDeeds, target: 100, unit: "عمل"},
+                {name: "30 يوم صلاة", current: appData.prayerStreak, target: 30, unit: "يوم"}
+            ];
+            
+            goals.forEach(goal => {
+                const progress = Math.min(goal.current / goal.target, 1.0);
+                const progressPercent = Math.round(progress * 100);
+                
+                const goalElement = document.createElement('div');
+                goalElement.className = 'mb-3';
+                goalElement.innerHTML = `
+                    <div class="d-flex justify-content-between">
+                        <span>${goal.name}</span>
+                        <span>${goal.current}/${goal.target} ${goal.unit}</span>
+                    </div>
+                    <div class="progress">
+                        <div class="progress-bar" role="progressbar" style="width: ${progressPercent}%">${progressPercent}%</div>
+                    </div>
+                `;
+                goalsProgress.appendChild(goalElement);
+            });
+        }
+
+        // وظيفة إنشاء تأثير الكونفيتي
+        function createConfetti() {
+            const colors = ['#1a5e63', '#2d936c', '#6abf69', '#b3e0a6'];
+            
+            for (let i = 0; i < 50; i++) {
+                const confetti = document.createElement('div');
+                confetti.className = 'confetti';
+                confetti.style.left = Math.random() * 100 + 'vw';
+                confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                confetti.style.animationDuration = (Math.random() * 3 + 2) + 's';
+                document.body.appendChild(confetti);
+                
+                setTimeout(() => {
+                    confetti.remove();
+                }, 5000);
+            }
+        }
+    </script>
+</body>
+</html>
