@@ -1,0 +1,254 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>الواحة الروحانية — النسخة الكاملة</title>
+  <meta name="description" content="الواحة الروحانية — واجهة متكاملة مع القرآن الصحيح، أذكار، ألعاب، وسجل تقدم.">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='16' fill='%231a5e63'/%3E%3Cpath d='M50 18 L62 34 L62 66 L38 66 L38 34 Z' fill='%23fff'/%3E%3Ccircle cx='50' cy='78' r='6' fill='%236abf69'/%3E%3C/svg%3E">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <!-- open button -->
+  <button class="open-panel-btn" id="openPanelBtn" title="فتح القائمة">
+    <i class="fas fa-bars"></i>
+  </button>
+
+  <!-- backdrop blur -->
+  <div id="backdrop" class="backdrop-blur"></div>
+
+  <!-- side panel -->
+  <aside class="side-panel" id="sidePanel" aria-hidden="true" role="dialog" aria-label="القائمة الجانبية">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
+      <div class="welcome-msg" id="welcomeMsg">مرحبا بكِ</div>
+      <button id="closePanelBtn" class="close-btn" title="إغلاق"><i class="fas fa-times"></i></button>
+    </div>
+
+    <div id="panelNav">
+      <div class="d-grid gap-2 mb-3">
+        <button class="btn btn-outline-primary nav-item" data-page="quran" title="القرآن الكريم"><i class="fas fa-book-open"></i> القرآن الكريم</button>
+        <button class="btn btn-outline-primary nav-item" data-page="quran-garden" title="بستان القرآن"><i class="fas fa-book-quran"></i> بستان القرآن</button>
+        <button class="btn btn-outline-primary nav-item" data-page="righteous-path" title="رياض الصالحين"><i class="fas fa-hands-praying"></i> رياض الصالحين</button>
+        <button class="btn btn-outline-primary nav-item" data-page="obedience-gardens" title="جنات الطاعة"><i class="fas fa-mosque"></i> جنات الطاعة</button>
+        <button class="btn btn-outline-primary nav-item" data-page="educational-games" title="ألعاب تربوية"><i class="fas fa-gamepad"></i> ألعاب تربوية</button>
+        <button class="btn btn-outline-primary nav-item" data-page="progress-tracker" title="سجل تطورك"><i class="fas fa-chart-line"></i> سجل تطورك</button>
+        <button class="btn btn-outline-primary nav-item" data-page="audio-duas" title="الأدعية الصوتية"><i class="fas fa-volume-up"></i> الأدعية الصوتية</button>
+      </div>
+    </div>
+
+    <hr/>
+    <div>
+      <small class="text-muted">عبارات ترحيب</small>
+      <ul id="phrasesList" style="list-style:none;padding:0;margin:6px 0 0 0"></ul>
+    </div>
+
+  </aside>
+
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-12">
+        <div class="islamic-card mb-3 top-bar">
+          <div class="d-flex justify-content-between align-items-center">
+            <div>
+              <h2 class="blessed-text m-0">الواحة الروحانية</h2>
+              <small class="text-muted">ملاذك الإيماني — النسخة الكاملة</small>
+            </div>
+            <div class="d-flex gap-2 align-items-center stats-group">
+              <div class="stat-card"><div class="stat-number" id="prayerStreak">0</div><div class="label">سلسلة الصلاة</div></div>
+              <div class="stat-card"><div class="stat-number" id="goodDeeds">0</div><div class="label">الحسنات</div></div>
+              <div class="stat-card"><div class="stat-number" id="quranPages">0</div><div class="label">صفحات القرآن</div></div>
+              <div class="stat-card"><div class="stat-number" id="gameScore">0</div><div class="label">نتيجة الألعاب</div></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Pages -->
+        <main id="mainContent">
+          <!-- Quran page -->
+          <section id="quran" class="page-content islamic-card">
+            <h3 class="blessed-text">القرآن الكريم</h3>
+            <p class="text-muted">اختر سورة من الفهرس لعرض نصها الأصلي (Uthmani).</p>
+            <div class="row">
+              <div class="col-md-4">
+                <div class="islamic-card surah-list" id="surahListBox">
+                  <h6>فهرس السور</h6>
+                  <div id="surahList" style="max-height:60vh;overflow:auto"></div>
+                </div>
+              </div>
+              <div class="col-md-8">
+                <div class="islamic-card surah-container">
+                  <div class="d-flex justify-content-between align-items-center mb-2">
+                    <div>
+                      <h5 id="surahTitle">اختر سورة من الفهرس</h5>
+                      <div class="text-muted control-small" id="surahMeta"></div>
+                    </div>
+                    <div class="d-flex gap-2">
+                      <button id="increaseFont" class="btn btn-outline-secondary btn-sm control-small">تكبير الخط</button>
+                      <button id="decreaseFont" class="btn btn-outline-secondary btn-sm control-small">تصغير الخط</button>
+                      <button id="toggleReaderTheme" class="btn btn-outline-secondary btn-sm control-small">وضع قارئ</button>
+                    </div>
+                  </div>
+                  <div style="margin-bottom:10px">
+                    <input id="searchInSurah" class="form-control" placeholder="ابحث داخل السورة (كلمة أو جزئية)" />
+                  </div>
+                  <div id="surahText">سيظهر نص السورة هنا عند اختيارها.</div>
+                  <div id="searchResults" style="margin-top:12px"></div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- Quran Garden -->
+          <section id="quran-garden" class="page-content islamic-card d-none">
+            <h3 class="blessed-text">بستان القرآن</h3>
+            <div class="row">
+              <div class="col-md-6">
+                <div class="quran-frame">
+                  <h5>آية اليوم</h5>
+                  <h3 id="dailyVerse">"أَلَا بِذِكْرِ اللَّهِ تَطْمَئِنُّ الْقُلُوبُ"</h3>
+                  <p id="verseSurah">الرعد - 28</p>
+                </div>
+                <p><strong>شرح الآية:</strong> <span id="verseExplanation">الذكر يطمئن القلب ويزيل الهمّ.</span></p>
+                <button id="newVerseBtn" class="btn btn-primary">آية جديدة</button>
+              </div>
+              <div class="col-md-6">
+                <h5 class="blessed-text">تحدي القرآن اليومي</h5>
+                <label>هدفك اليومي: <span id="goalValue">10</span> صفحة</label>
+                <input id="pagesGoal" type="range" class="form-range" min="1" max="30" value="10">
+                <button id="recordReadingBtn" class="btn btn-success mt-2">سجّلي قراءتك</button>
+
+                <h5 class="mt-4">مكتبة الأدعية</h5>
+                <select id="duaCategory" class="form-select mb-2">
+                  <option value="all">جميع الأدعية</option>
+                  <option value="knowledge">العلم والعمل</option>
+                  <option value="ease">التيسير</option>
+                  <option value="worries">الهموم</option>
+                  <option value="general">الدعاء الجامع</option>
+                </select>
+                <div class="dua-card p-3 mt-2">
+                  <p id="duaText">اللهم إني أسألك علماً نافعاً، ورزقاً طيباً، وعملاً متقبلاً</p>
+                  <small id="duaCategoryText" class="text-muted">نوع الدعاء: العلم والعمل</small>
+                </div>
+                <button id="newDuaBtn" class="btn btn-outline-primary mt-2">دعاء جديد</button>
+              </div>
+            </div>
+          </section>
+
+          <!-- Righteous -->
+          <section id="righteous-path" class="page-content islamic-card d-none">
+            <h3 class="blessed-text">رياض الصالحين</h3>
+            <div class="row">
+              <div class="col-md-6">
+                <h5>أعمال الخير اليومية</h5>
+                <select id="goodDeedsSelect" class="form-select mb-2">
+                  <option>مساعدة الوالدين</option>
+                  <option>زيارة الأقارب</option>
+                  <option>إطعام طائر</option>
+                  <option>تبسم في وجه أخيك</option>
+                  <option>إماطة الأذى عن الطريق</option>
+                  <option>إطعام صائم</option>
+                  <option>التصدق بقطعة خبز</option>
+                  <option>حفظ صفحة من القرآن</option>
+                  <option>برّ الجار</option>
+                  <option>الاستغفار 100 مرة</option>
+                  <option>تعليم شخص حكمة بسيطة</option>
+                  <option>زيارة مريض</option>
+                  <option>مساعدة طالب في دراسته</option>
+                </select>
+                <button id="recordDeedBtn" class="btn btn-success">سجّلي هذا العمل</button>
+              </div>
+              <div class="col-md-6">
+                <h5>متابعة الصلوات</h5>
+                <div class="form-check"><input class="form-check-input prayer-check" type="checkbox" id="fajrPrayer"><label class="form-check-label" for="fajrPrayer">صلاة الفجر</label></div>
+                <div class="form-check"><input class="form-check-input prayer-check" type="checkbox" id="dhuhrPrayer"><label class="form-check-label" for="dhuhrPrayer">صلاة الظهر</label></div>
+                <div class="form-check"><input class="form-check-input prayer-check" type="checkbox" id="asrPrayer"><label class="form-check-label" for="asrPrayer">صلاة العصر</label></div>
+                <div class="form-check"><input class="form-check-input prayer-check" type="checkbox" id="maghribPrayer"><label class="form-check-label" for="maghribPrayer">صلاة المغرب</label></div>
+                <div class="form-check"><input class="form-check-input prayer-check" type="checkbox" id="ishaPrayer"><label class="form-check-label" for="ishaPrayer">صلاة العشاء</label></div>
+                <button id="calculatePrayerBtn" class="btn btn-primary mt-2">احسبي سلسلة الصلاة</button>
+              </div>
+            </div>
+          </section>
+
+          <!-- Obedience -->
+          <section id="obedience-gardens" class="page-content islamic-card d-none">
+            <h3 class="blessed-text">جنات الطاعة</h3>
+            <ul class="nav nav-pills mb-3" id="obedienceTabs">
+              <li class="nav-item"><button class="nav-link active" data-bs-toggle="pill" data-bs-target="#azkar">الأذكار اليومية</button></li>
+              <li class="nav-item"><button class="nav-link" data-bs-toggle="pill" data-bs-target="#dua">دعاء الخير</button></li>
+              <li class="nav-item"><button class="nav-link" data-bs-toggle="pill" data-bs-target="#worship">العبادات المستحبة</button></li>
+            </ul>
+            <div class="tab-content">
+              <div class="tab-pane fade show active p-2" id="azkar">
+                <div class="row">
+                  <div class="col-md-4"><div class="islamic-card text-center"><h6>أذكار الصباح</h6><div id="countMorning" style="font-size:28px">0</div><div class="mt-2"><button class="btn btn-outline-primary btn-sm" id="incMorning" data-counter="morning">اضغط للزيادة</button><button class="btn btn-outline-secondary btn-sm" id="resetMorning" data-counter="morning">إعادة</button></div></div></div>
+                  <div class="col-md-4"><div class="islamic-card text-center"><h6>أذكار المساء</h6><div id="countEvening" style="font-size:28px">0</div><div class="mt-2"><button class="btn btn-outline-primary btn-sm" id="incEvening" data-counter="evening">اضغط للزيادة</button><button class="btn btn-outline-secondary btn-sm" id="resetEvening" data-counter="evening">إعادة</button></div></div></div>
+                  <div class="col-md-4"><div class="islamic-card text-center"><h6>بعد الصلاة</h6><div id="countAfter" style="font-size:28px">0</div><div class="mt-2"><button class="btn btn-outline-primary btn-sm" id="incAfter" data-counter="after">اضغط للزيادة</button><button class="btn btn-outline-secondary btn-sm" id="resetAfter" data-counter="after">إعادة</button></div></div></div>
+                </div>
+              </div>
+              <div class="tab-pane fade p-2" id="dua">
+                <h5>دعاء الخير</h5>
+                <div class="dua-card">
+                  <p>اللهم اغفر لنا وارحمنا، وارزقنا الهداية والتوفيق. اللهم اجعل أعمالنا خالصة لوجهك الكريم.</p>
+                  <p>اللهم إنا نسألك العفو والعافية في الدين والدنيا والآخرة، اللهم ثبت قلوبنا على طاعتك.</p>
+                </div>
+              </div>
+              <div class="tab-pane fade p-2" id="worship">
+                <h5>العبادات المستحبة</h5>
+                <ul>
+                  <li>التحصّن بالأذكار بعد الصلوات</li>
+                  <li>الصدقة المستمرة ولو بالقليل</li>
+                  <li>صلة الرحم وزيارة المريض</li>
+                  <li>الاستغفار والذكر اليومي</li>
+                </ul>
+              </div>
+            </div>
+          </section>
+
+          <!-- Games -->
+          <section id="educational-games" class="page-content islamic-card d-none">
+            <h3 class="blessed-text">ألعاب تربوية</h3>
+            <div class="row">
+              <div class="col-md-6">
+                <h5>لعبة الذاكرة</h5>
+                <div class="memory-game row g-2" id="memoryBoard"></div>
+                <div class="mt-2"><button id="newGameBtn" class="btn btn-outline-primary">ابدأ لعبة ذاكرة جديدة</button></div>
+              </div>
+              <div class="col-md-6">
+                <h5>اختبار تفاعلي</h5>
+                <div id="quizArea"><div id="quizQuestion" class="mb-2"></div><div id="quizOptions" class="mb-2"></div><div class="d-flex gap-2"><button id="nextQBtn" class="btn btn-primary btn-sm">السؤال التالي</button><button id="startQuizBtn" class="btn btn-outline-primary btn-sm">ابدأ اختبارًا جديدًا</button></div><div class="mt-2">النقاط: <span id="quizScore">0</span></div></div>
+                <hr/>
+                <h5>ألغاز نصية</h5>
+                <div id="riddleArea"><div id="riddleQuestion"></div><input id="riddleAnswer" class="form-control mt-2" placeholder="اكتب إجابتك هنا"/><button id="submitRiddle" class="btn btn-success mt-2">تحقق</button><div id="riddleResult" class="mt-2"></div></div>
+              </div>
+            </div>
+          </section>
+
+          <!-- Progress -->
+          <section id="progress-tracker" class="page-content islamic-card d-none">
+            <h3 class="blessed-text">سجل تطورك</h3>
+            <div class="row">
+              <div class="col-md-6"><h6>هدف القراءة اليومي: <span id="currentGoal">10</span> صفحة</h6><div class="progress mb-2"><div id="pagesProgress" class="progress-bar" role="progressbar" style="width:0%">0%</div></div></div>
+              <div class="col-md-6"><h6>إنجازات سريعة</h6><ul id="achievementsList" class="list-group"></ul></div>
+            </div>
+          </section>
+
+          <!-- Audio Duas (note: placeholders) -->
+          <section id="audio-duas" class="page-content islamic-card d-none">
+            <h3 class="blessed-text">الأدعية الصوتية</h3>
+            <p>هذه الخانة مُعطلة صوتيًا حسب طلبك، يمكن لاحقًا إضافة روابط تشغيل إن رغبتِ.</p>
+          </section>
+
+        </main>
+      </div>
+    </div>
+  </div>
+
+  <audio id="uiClick" preload="auto"><source src="" type="audio/mpeg"></audio>
+  <audio id="uiBreeze" preload="auto"><source src="" type="audio/mpeg"></audio>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
