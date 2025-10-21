@@ -1,36 +1,27 @@
 {
   "name": "الواحة الروحانية",
   "short_name": "الواحة",
-  "description": "ملاذك الإيماني المتكامل - قرآن، أذكار، ألعاب تربوية",
-  "lang": "ar",
-  "dir": "rtl",
+  "description": "ملاذك الإيماني - قرآن، أذكار، ألعاب تربوية",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#014d40",
   "theme_color": "#014d40",
-  "orientation": "portrait-primary",
+  "orientation": "portrait",
   "scope": "/",
-  "categories": ["education", "religion", "lifestyle"],
+  "lang": "ar",
+  "dir": "rtl",
   "icons": [
     {
-      "src": "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'%3E%3Crect width='192' height='192' rx='32' fill='%23014d40'/%3E%3Cpath d='M96 32 L120 64 L120 128 L72 128 L72 64 Z' fill='%23fff'/%3E%3Ccircle cx='96' cy='152' r='12' fill='%236abf69'/%3E%3C/svg%3E",
+      "src": "icons/icon-192.png",
       "sizes": "192x192",
-      "type": "image/svg+xml",
+      "type": "image/png",
       "purpose": "any maskable"
     },
     {
-      "src": "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Crect width='512' height='512' rx='64' fill='%23014d40'/%3E%3Cpath d='M256 96 L320 160 L320 352 L192 352 L192 160 Z' fill='%23fff'/%3E%3Ccircle cx='256' cy='416' r='32' fill='%236abf69'/%3E%3C/svg%3E",
+      "src": "icons/icon-512.png",
       "sizes": "512x512",
-      "type": "image/svg+xml",
+      "type": "image/png",
       "purpose": "any maskable"
-    }
-  ],
-  "screenshots": [
-    {
-      "src": "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 600'%3E%3Crect width='1200' height='600' fill='%23014d40'/%3E%3Crect x='100' y='100' width='1000' height='400' rx='20' fill='%23013b33'/%3E%3Ctext x='600' y='200' text-anchor='middle' fill='%23d9b44a' font-family='Arial' font-size='48'%3Eالواحة الروحانية%3C/text%3E%3Ctext x='600' y='260' text-anchor='middle' fill='%23fff' font-family='Arial' font-size='24'%3Eملاذك الإيماني المتكامل%3C/text%3E%3C/svg%3E",
-      "sizes": "1200x600",
-      "type": "image/svg+xml",
-      "form_factor": "wide"
     }
   ]
 }
