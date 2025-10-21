@@ -651,3 +651,64 @@ html,body{height:100%;margin:0;font-family:"Segoe UI", Tahoma, sans-serif;backgr
   .achievements-grid { grid-template-columns: repeat(2, 1fr); }
   .journey-topics { grid-template-columns: 1fr; }
 }
+
+/* تنسيقات إشعار تثبيت التطبيق */
+.install-prompt {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.8);
+  z-index: 10000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(5px);
+}
+
+.install-content {
+  background: linear-gradient(135deg, var(--primary), var(--primary-2));
+  padding: 30px;
+  border-radius: 20px;
+  text-align: center;
+  border: 2px solid var(--gold);
+  max-width: 400px;
+  width: 90%;
+  animation: scaleIn 0.3s ease-out;
+}
+
+@keyframes scaleIn {
+  from {
+    transform: scale(0.8);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.install-icon {
+  font-size: 4rem;
+  margin-bottom: 20px;
+}
+
+.install-buttons {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+/* تحسينات للعرض على الجوال */
+@media (max-width: 480px) {
+  .install-content {
+    padding: 20px;
+    margin: 20px;
+  }
+  
+  .install-buttons {
+    flex-direction: column;
+  }
+}
