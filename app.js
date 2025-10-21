@@ -1204,4 +1204,202 @@
     calculateLevel
   };
 
+  /* ---------- نظام تثبيت التطبيق التلقائي ---------- */
+let deferredPrompt;
+let installPromptShown = false;
+
+// استقبال حدث التثبيت
+window.addEventListener('beforeinstallprompt', (e) => {
+  e.preventDefault();
+  deferredPrompt = e;
+  
+  // عرض إشعار التثبيت تلقائياً بعد 5 ثواني
+  setTimeout(() => {
+    if (!installPromptShown) {
+      showInstallPrompt();
+    }
+  }, 5000);
+});
+
+// عرض إشعار التثبيت
+function showInstallPrompt() {
+  if (installPromptShown || !deferredPrompt) return;
+  
+  installPromptShown = true;
+  
+  const installToast = document.createElement('div');
+  installToast.id = 'installToast';
+  installToast.innerHTML = `
+    <div class="install-toast-content">
+      <div class="install-icon">📱</div>
+      <div class="install-text">
+        <h6>حمل التطبيق الآن!</h6>
+        <p>ثبّت الواحة الروحانية على جهازك لتجربة أفضل</p>
+        <small>وصول سريع - عمل دون اتصال - إشعارات مفيدة</small>
+      </div>
+      <div class="install-actions">
+        <button class="btn btn-sm btn-outline-light" id="installLater">لاحقاً</button>
+        <button class="btn btn-sm btn-success" id="installNow">تثبيت</button>
+      </div>
+      <button class="btn-close" id="closeInstallToast">×</button>
+    </div>
+  `;
+  
+  document.body.appendChild(installToast);
+  
+  // إضافة التنسيقات
+  const style = document.createElement('style');
+  style.textContent = `
+    #installToast {
+      position: fixed;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: linear-gradient(135deg, #014d40, #013b33);
+      border: 2px solid var(--gold);
+      border-radius: 20px;
+      padding: 20px;
+      z-index: 10000;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+      backdrop-filter: blur(10px);
+      animation: slideInUp 0.5s ease-out;
+      max-width: 500px;
+      width: 90%;
+    }
+    
+    @keyframes slideInUp {
+      from {
+        transform: translateX(-50%) translateY(100px);
+        opacity: 0;
+      }
+      to {
+        transform: translateX(-50%) translateY(0);
+        opacity: 1;
+      }
+    }
+    
+    .install-toast-content {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      position: relative;
+    }
+    
+    .install-icon {
+      font-size: 2.5rem;
+      flex-shrink: 0;
+    }
+    
+    .install-text {
+      flex: 1;
+      text-align: right;
+    }
+    
+    .install-text h6 {
+      color: var(--gold);
+      margin: 0 0 5px 0;
+      font-weight: bold;
+    }
+    
+    .install-text p {
+      margin: 0 0 5px 0;
+      color: white;
+      font-size: 0.9rem;
+    }
+    
+    .install-text small {
+      color: rgba(255,255,255,0.7);
+      font-size: 0.8rem;
+    }
+    
+    .install-actions {
+      display: flex;
+      gap: 10px;
+      flex-shrink: 0;
+    }
+    
+    #closeInstallToast {
+      position: absolute;
+      top: -10px;
+      left: -10px;
+      background: rgba(0,0,0,0.7);
+      border: none;
+      color: white;
+      border-radius: 50%;
+      width: 25px;
+      height: 25px;
+      cursor: pointer;
+      font-size: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    @media (max-width: 768px) {
+      .install-toast-content {
+        flex-direction: column;
+        text-align: center;
+      }
+      
+      .install-actions {
+        width: 100%;
+        justify-content: center;
+      }
+    }
+  `;
+  document.head.appendChild(style);
+  
+  // مستمعي الأحداث
+  document.getElementById('installNow').addEventListener('click', async () => {
+    installToast.remove();
+    if (deferredPrompt) {
+      deferredPrompt.prompt();
+      const { outcome } = await deferredPrompt.userChoice;
+      
+      if (outcome === 'accepted') {
+        console.log('User accepted the install prompt');
+        showTempToast('🎉 تم بدء تثبيت التطبيق');
+        awardPoints(20, 'تثبيت التطبيق');
+      } else {
+        console.log('User dismissed the install prompt');
+      }
+      deferredPrompt = null;
+    }
+  });
+  
+  document.getElementById('installLater').addEventListener('click', () => {
+    installToast.remove();
+    // إعادة العرض بعد يوم
+    setTimeout(() => {
+      installPromptShown = false;
+    }, 24 * 60 * 60 * 1000);
+  });
+  
+  document.getElementById('closeInstallToast').addEventListener('click', () => {
+    installToast.remove();
+    // إعادة العرض بعد أسبوع
+    setTimeout(() => {
+      installPromptShown = false;
+    }, 7 * 24 * 60 * 60 * 1000);
+  });
+}
+
+// التحقق مما إذا كان التطبيق مثبتاً
+window.addEventListener('appinstalled', () => {
+  console.log('App installed successfully');
+  deferredPrompt = null;
+  showTempToast('🎉 تم تثبيت التطبيق بنجاح!');
+});
+
+// التحقق من وضع العرض
+function isRunningAsPWA() {
+  return window.matchMedia('(display-mode: standalone)').matches || 
+         window.navigator.standalone ||
+         document.referrer.includes('android-app://');
+}
+
+// إخفاء إشعار التثبيت إذا كان التطبيق مثبتاً
+if (isRunningAsPWA()) {
+  installPromptShown = true;
+}
 })();
